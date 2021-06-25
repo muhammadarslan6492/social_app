@@ -27,4 +27,38 @@ const  createPostValidator = (req, res, next) => {
 
 }
 
-export {createPostValidator}
+const userPostValidator = (req, res, next) => {
+
+    //name is not null 4 to 32 min and max character
+
+    req.check("name", "name is required").notEmpty();
+
+    // email is not null valid and normalized
+
+    req.check("email", "email must be 3 to 40 character").matches(/.+\@.+\..+/)
+    .withMessage("email must contain @").isLength({
+        min: 4,
+        max: 100
+    })
+
+    req.check("password", "password not empty").notEmpty();
+    req.check("password").isLength({min: 6}).withMessage("password must contain alteast 6 character");
+
+        // check for error 
+        const errors =  req.validationErrors();
+        if(errors){
+    
+            const firstError = errors.map(error => error.msg)[0];
+            return res.status(400).json({error: firstError})
+        }
+        // proceed to the next middleware
+
+    next();
+}
+
+
+
+
+
+
+export {createPostValidator, userPostValidator }

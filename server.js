@@ -10,6 +10,7 @@ import expressValidator from 'express-validator'
 //all route imports
 
 import postRouter from "./routes/postRoute.js"
+import authRoute from "./routes/authRoute.js"
 
 
 
@@ -61,6 +62,7 @@ app.use(expressValidator())
 //router middleware
 
 app.use("/", postRouter);
+app.use("/user", authRoute);
 
 
 
