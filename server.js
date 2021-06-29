@@ -1,40 +1,36 @@
-//all module imports 
-import express from 'express';
-import morgan from 'morgan';
-import mongoose from "mongoose"
-import dotenv from "dotenv"
-import bodyParser from 'body-parser';
-import expressValidator from 'express-validator'
-
+//all module imports
+import express from "express";
+import morgan from "morgan";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import bodyParser from "body-parser";
+import expressValidator from "express-validator";
+import cookieParser from "cookie-parser";
 
 //all route imports
 
-import postRouter from "./routes/postRoute.js"
-import authRoute from "./routes/authRoute.js"
-
-
-
+import postRouter from "./routes/postRoute.js";
+import authRoute from "./routes/authRoute.js";
 
 dotenv.config();
 
 //database congiguration
- mongoose.connect(process.env.DB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-  useCreateIndex: true
-}).then(() => {
-    console.log("database is connected successfully")
-}).catch(err => {
-    console.log(err)
-});
-
-
+mongoose
+  .connect(process.env.DB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true,
+  })
+  .then(() => {
+    console.log("database is connected successfully");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 //app configuration
 const app = express();
-
-
 
 //creating my ownMiddleware
 
@@ -44,33 +40,22 @@ const app = express();
 //     next();
 // }
 
-
 //middleware
 app.use(express.json());
-app.use(morgan('dev'))
-app.use(bodyParser.json())
-app.use(expressValidator())
-
-
+app.use(cookieParser());
+app.use(morgan("dev"));
+app.use(bodyParser.json());
+app.use(expressValidator());
 
 // app.use(myOwnMiddleware)
-
-
-
-
 
 //router middleware
 
 app.use("/", postRouter);
 app.use("/user", authRoute);
 
-
-
-
-
 const port = process.env.PORT || 8080;
 
-
 app.listen(port, () => {
-    console.log(`app running on port ${port}`)
-})
+  console.log(`app running on port ${port}`);
+});
